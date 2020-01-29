@@ -1,0 +1,668 @@
+<?xml version="1.0"?>
+  <robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+         xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+         xmlns:interface="http://ros.org/wiki/xacro"
+         xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" name="ballbot">
+
+   <xacro:macro name="omni" params="x y z roll pit yaw pos">
+      <link name="wheel${pos}">
+      <collision>
+         <origin xyz="0 0 0" rpy="${roll} ${pit} ${yaw}"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_Double_ohneRaeder.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+         </collision>
+      <visual>
+         <origin xyz="0 0 0" rpy="${roll} ${pit} ${yaw}"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_Double_ohneRaeder.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+         </visual>
+       <inertial>
+          <origin xyz="0 0 0" rpy="${roll} ${pit} ${yaw}"/>
+         <mass value = "0.55"/>
+    <inertia ixx="0.0005" ixy ="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+    <gazebo>
+      <gravity> 1 </gravity>
+      <dampingFactor>0.4</dampingFactor>
+      <mu1>0.4</mu1>
+      <mu2>0.4</mu2>
+      <selfCollide>1</selfCollide>
+    </gazebo>
+
+      </link>
+
+
+     <link name="roller1${pos}">
+       <collision >
+           <origin xyz="0 0 0" rpy="0 0 1.57079"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+        </collision>
+        <visual >
+           <origin xyz="0 0 0" rpy="0 0 1.57079"/>
+           <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+        </visual>
+<inertial>
+         <mass value = "0.05"/>
+<inertia ixx="0.000018" ixy ="0" ixz="0" iyy="0.00000722" iyz="0.0" izz="0.00000722"/>
+</inertial>
+<gazebo>
+<gravity> 1 </gravity>
+<dampingFactor>0.4</dampingFactor>
+<mu1>0.4</mu1>
+<mu2>0.4</mu2>
+<selfCollide>1</selfCollide>
+</gazebo>
+
+      </link>
+    <joint name="1${pos}" type="continuous">
+     <parent link="wheel${pos}"/>
+     <child link="roller1${pos}"/>
+     <origin xyz="${0.222*(-(0)*sin(yaw)+((0.05-0.28)*sin(pit)+(0.137)*cos(pit))*cos(yaw))} ${0.222*(((0)*cos(yaw))+((0.05-0.28)*sin(pit)+(0.137)*cos(pit))*sin(yaw))} ${0.222*((0.05-0.28)*cos(pit)+0.28-(0.137)*sin(pit)-0.28)}" rpy="${roll} ${pit} ${yaw}"/>
+     <axis xyz="0 1 0">
+       <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+    </joint>
+
+
+
+
+
+    <link name="roller2${pos}">
+       <collision >
+           <origin xyz="0 0 0" rpy="0 -1.25664 1.57079"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+        </collision>
+        <visual >
+           <origin xyz="0 0 0" rpy="0 -1.25664 1.57079"/>
+           <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+        </visual>
+<inertial>
+         <mass value = "0.05"/>
+<inertia ixx="0.000018" ixy ="0" ixz="0" iyy="0.00000722" iyz="0.0" izz="0.00000722"/>
+</inertial>
+<gazebo>
+<gravity> 1 </gravity>
+<dampingFactor>0.4</dampingFactor>
+<mu1>0.4</mu1>
+<mu2>0.4</mu2>
+<selfCollide>1</selfCollide>
+</gazebo>
+
+      </link>
+    <joint name="2${pos}" type="continuous">
+     <parent link="wheel${pos}"/>
+     <child link="roller2${pos}"/>
+     <origin xyz="${0.222*(-(0.21)*sin(yaw)+((0.208-0.28)*sin(pit)+(0.137)*cos(pit))*cos(yaw))} ${0.222*(((0.21)*cos(yaw))+((0.208-0.28)*sin(pit)+(0.137)*cos(pit))*sin(yaw))} ${0.222*((0.208-0.28)*cos(pit)+0.28-(0.137)*sin(pit)-0.28)}" rpy="${roll} ${pit} ${yaw}"/>
+     <axis xyz="0 0.31 0.95">
+      <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+    </joint>
+
+
+
+
+
+
+     <link name="roller3${pos}">
+        <collision >
+           <origin xyz="0 0 0" rpy="0 -2.5132 1.57079"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+        </collision>
+        <visual >
+           <origin xyz="0 0 0" rpy="0 -2.5132 1.57079"/>
+           <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+        </visual>
+<inertial>
+         <mass value = "0.05"/>
+<inertia ixx="0.000018" ixy ="0" ixz="0" iyy="0.00000722" iyz="0.0" izz="0.00000722"/>
+</inertial>
+<gazebo>
+<gravity> 1 </gravity>
+<dampingFactor>0.4</dampingFactor>
+<mu1>0.4</mu1>
+<mu2>0.4</mu2>
+<selfCollide>1</selfCollide>
+</gazebo>
+
+      </link>
+    <joint name="3${pos}" type="continuous">
+     <parent link="wheel${pos}"/>
+     <child link="roller3${pos}"/>
+     <origin xyz="${0.222*(-(0.14)*sin(yaw)+((0.47-0.28)*sin(pit)+(0.137)*cos(pit))*cos(yaw))} ${0.222*(((0.14)*cos(yaw))+((0.47-0.28)*sin(pit)+(0.137)*cos(pit))*sin(yaw))} ${0.222*((0.47-0.28)*cos(pit)+0.28-(0.137)*sin(pit)-0.28)}" rpy="${roll} ${pit} ${yaw}"/>
+     <axis xyz="0 -0.81 0.59">
+      <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+    </joint>
+
+
+
+
+
+
+     <link name="roller4${pos}">
+           <collision >
+           <origin xyz="0 0 0" rpy="0 -3.7699 1.57079"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+        </collision>
+        <visual >
+           <origin xyz="0 0 0" rpy="0 -3.7699 1.57079"/>
+           <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+        </visual>
+<inertial>
+         <mass value = "0.05"/>
+<inertia ixx="0.000018" ixy ="0" ixz="0" iyy="0.00000722" iyz="0.0" izz="0.00000722"/>
+</inertial>
+<gazebo>
+<gravity> 1 </gravity>
+<dampingFactor>0.4</dampingFactor>
+<mu1>0.4</mu1>
+<mu2>0.4</mu2>
+<selfCollide>1</selfCollide>
+</gazebo>
+
+      </link>
+    <joint name="4${pos}" type="continuous">
+     <parent link="wheel${pos}"/>
+     <child link="roller4${pos}"/>
+     <origin xyz="${0.222*(-(-0.14)*sin(yaw)+((0.47-0.28)*sin(pit)+(0.137)*cos(pit))*cos(yaw))} ${0.222*(((-0.14)*cos(yaw))+((0.47-0.28)*sin(pit)+(0.137)*cos(pit))*sin(yaw))} ${0.222*((0.47-0.28)*cos(pit)+0.28-(0.137)*sin(pit)-0.28)}" rpy="${roll} ${pit} ${yaw}"/>
+     <axis xyz="0 -0.81 -0.59">
+      <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+    </joint>
+
+
+
+
+
+     <link name="roller5${pos}">
+        <collision >
+           <origin xyz="0 0 0" rpy="0 1.25664 1.57079"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+        </collision>
+        <visual >
+           <origin xyz="0 0 0" rpy="0 1.25664 1.57079"/>
+           <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+        </visual>
+<inertial>
+         <mass value = "0.05"/>
+<inertia ixx="0.000018" ixy ="0" ixz="0" iyy="0.00000722" iyz="0.0" izz="0.00000722"/>
+</inertial>
+<gazebo>
+<gravity> 1 </gravity>
+<dampingFactor>0.4</dampingFactor>
+<mu1>0.4</mu1>
+<mu2>0.4</mu2>
+<selfCollide>1</selfCollide>
+</gazebo>
+
+      </link>
+    <joint name="5${pos}" type="continuous">
+     <parent link="wheel${pos}"/>
+     <child link="roller5${pos}"/>
+     <origin xyz="${0.222*(-(-0.22)*sin(yaw)+((0.21-0.28)*sin(pit)+(0.137)*cos(pit))*cos(yaw))} ${0.222*(((-0.22)*cos(yaw))+((0.21-0.28)*sin(pit)+(0.137)*cos(pit))*sin(yaw))} ${0.222*((0.21-0.28)*cos(pit)+0.28-(0.137)*sin(pit)-0.28)}" rpy="${roll} ${pit} ${yaw}"/>
+     <axis xyz="0 0.31 -0.95">
+      <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+    </joint>
+
+
+
+
+
+
+     <link name="roller6${pos}">
+       <collision >
+           <origin xyz="0 0 0" rpy="0 -0.6283 1.57079"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+        </collision>
+        <visual >
+           <origin xyz="0 0 0" rpy="0 -0.6283 1.57079"/>
+           <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+        </visual>
+<inertial>
+         <mass value = "0.05"/>
+<inertia ixx="0.000018" ixy ="0" ixz="0" iyy="0.00000722" iyz="0.0" izz="0.00000722"/>
+</inertial>
+<gazebo>
+<gravity> 1 </gravity>
+<dampingFactor>0.4</dampingFactor>
+<mu1>0.4</mu1>
+<mu2>0.4</mu2>
+<selfCollide>1</selfCollide>
+</gazebo>
+
+      </link>
+    <joint name="6${pos}" type="continuous">
+     <parent link="wheel${pos}"/>
+     <child link="roller6${pos}"/>
+     <origin xyz="${0.222*(-(0.14)*sin(yaw)+((0.094-0.28)*sin(pit)+(0.01)*cos(pit))*cos(yaw))} ${0.222*(((0.14)*cos(yaw))+((0.094-0.28)*sin(pit)+(0.01)*cos(pit))*sin(yaw))} ${0.222*((0.094-0.28)*cos(pit)+0.28-(0.01)*sin(pit)-0.28)}" rpy="${roll} ${pit} ${yaw}"/>
+     <axis xyz="0 0.81 0.59">
+      <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+    </joint>
+
+
+
+
+
+
+     <link name="roller7${pos}">
+      <collision >
+           <origin xyz="0 0 0" rpy="0 -1.8849 1.57079"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+        </collision>
+        <visual >
+           <origin xyz="0 0 0" rpy="0 -1.8849 1.57079"/>
+           <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+        </visual>
+<inertial>
+         <mass value = "0.05"/>
+<inertia ixx="0.000018" ixy ="0" ixz="0" iyy="0.00000722" iyz="0.0" izz="0.00000722"/>
+</inertial>
+<gazebo>
+<gravity> 1 </gravity>
+<dampingFactor>0.4</dampingFactor>
+<mu1>0.4</mu1>
+<mu2>0.4</mu2>
+<selfCollide>1</selfCollide>
+</gazebo>
+
+      </link>
+    <joint name="7${pos}" type="continuous">
+     <parent link="wheel${pos}"/>
+     <child link="roller7${pos}"/>
+     <origin xyz="${0.222*(-(0.22)*sin(yaw)+((0.35-0.28)*sin(pit)+(0.01)*cos(pit))*cos(yaw))} ${0.222*(((0.22)*cos(yaw))+((0.35-0.28)*sin(pit)+(0.01)*cos(pit))*sin(yaw))} ${0.222*((0.35-0.28)*cos(pit)+0.28-(0.01)*sin(pit)-0.28)}" rpy="${roll} ${pit} ${yaw}"/>
+     <axis xyz="0 -0.31 0.95">
+      <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+    </joint>
+
+
+
+
+
+
+     <link name="roller8${pos}">
+      <collision >
+           <origin xyz="0 0 0" rpy="0 -3.14159 1.57079"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+        </collision>
+        <visual >
+           <origin xyz="0 0 0" rpy="0 -3.14159 1.57079"/>
+           <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+        </visual>
+<inertial>
+         <mass value = "0.05"/>
+<inertia ixx="0.000018" ixy ="0" ixz="0" iyy="0.00000722" iyz="0.0" izz="0.00000722"/>
+</inertial>
+<gazebo>
+<gravity> 1 </gravity>
+<dampingFactor>0.4</dampingFactor>
+<mu1>0.4</mu1>
+<mu2>0.4</mu2>
+<selfCollide>1</selfCollide>
+</gazebo>
+
+      </link>
+    <joint name="8${pos}" type="continuous">
+     <parent link="wheel${pos}"/>
+     <child link="roller8${pos}"/>
+     <origin xyz="${0.222*(-(0)*sin(yaw)+((0.51-0.28)*sin(pit)+(0.01)*cos(pit))*cos(yaw))} ${0.222*(((0)*cos(yaw))+((0.51-0.28)*sin(pit)+(0.01)*cos(pit))*sin(yaw))} ${0.222*((0.51-0.28)*cos(pit)+0.28-(0.01)*sin(pit)-0.28)}" rpy="${roll} ${pit} ${yaw}"/>
+     <axis xyz="0 -1 0">
+      <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+    </joint>
+
+
+
+
+
+
+     <link name="roller9${pos}">
+      <collision >
+           <origin xyz="0 0 0" rpy="0 -4.3982 1.57079"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+        </collision>
+        <visual >
+           <origin xyz="0 0 0" rpy="0 -4.3982 1.57079"/>
+           <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+        </visual>
+<inertial>
+         <mass value = "0.05"/>
+<inertia ixx="0.000018" ixy ="0" ixz="0" iyy="0.00000722" iyz="0.0" izz="0.00000722"/>
+</inertial>
+<gazebo>
+<gravity> 1 </gravity>
+<dampingFactor>0.4</dampingFactor>
+<mu1>0.4</mu1>
+<mu2>0.4</mu2>
+<selfCollide>1</selfCollide>
+</gazebo>
+
+      </link>
+    <joint name="9${pos}" type="continuous">
+     <parent link="wheel${pos}"/>
+     <child link="roller9${pos}"/>
+     <origin xyz="${0.222*(-(-0.22)*sin(yaw)+((0.35-0.28)*sin(pit)+(0.01)*cos(pit))*cos(yaw))} ${0.222*(((-0.22)*cos(yaw))+((0.35-0.28)*sin(pit)+(0.01)*cos(pit))*sin(yaw))} ${0.222*((0.35-0.28)*cos(pit)+0.28-(0.01)*sin(pit)-0.28)}" rpy="${roll} ${pit} ${yaw}"/>
+     <axis xyz="0 -0.31 -0.95">
+      <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+    </joint>
+
+
+
+
+
+     <link name="roller10${pos}">
+       <collision >
+           <origin xyz="0 0 0" rpy="0 -5.6548 1.57079"/>
+          <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+          <friction>
+            <mu>0.4</mu>
+            <mu2>0.4</mu2>
+          </friction>
+        </collision>
+        <visual >
+           <origin xyz="0 0 0" rpy="0 -5.6548 1.57079"/>
+           <geometry>
+            <mesh filename="package://omni_bot/src/Wheel2_wheel_rightOrient.stl" scale=".0021 .0021 .0021"/>
+          </geometry>
+        </visual>
+<inertial>
+         <mass value = "0.05"/>
+<inertia ixx="0.000018" ixy ="0" ixz="0" iyy="0.00000722" iyz="0.0" izz="0.00000722"/>
+</inertial>
+<gazebo>
+  <gravity> 1 </gravity>
+  <dampingFactor>0.4</dampingFactor>
+  <mu1>0.4</mu1>
+  <mu2>0.4</mu2>
+  <selfCollide>1</selfCollide>
+</gazebo>
+
+      </link>
+    <joint name="10${pos}" type="continuous">
+     <parent link="wheel${pos}"/>
+     <child link="roller10${pos}"/>
+     <origin xyz="${0.222*(-(-0.14)*sin(yaw)+((0.094-0.28)*sin(pit)+(0.01)*cos(pit))*cos(yaw))} ${0.222*(((-0.14)*cos(yaw))+((0.094-0.28)*sin(pit)+(0.01)*cos(pit))*sin(yaw))} ${0.222*((0.094-0.28)*cos(pit)+0.28-(0.01)*sin(pit)-0.28)}" rpy="${roll} ${pit} ${yaw}"/>
+     <axis xyz="0 0.81 -0.59">
+      <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+    </joint>
+ 
+</xacro:macro>
+
+<link name="body">
+  <collision>
+     <origin xyz="0 0 0.015625" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://omni_bot/src/body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+     </collision>
+  <visual>
+    <origin xyz="0 0 0.015625" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://omni_bot/src/body.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+     </visual>
+     <inertial>
+      <origin xyz="0 0 0.065625"/>
+      <mass value = "1.0"/>
+      <inertia ixx="0.01" ixy ="0" ixz="0" iyy="0.01" iyz="0.0" izz="0.01"/>
+      </inertial>
+</link>
+
+
+
+<xacro:omni x="0.32" y="0.0" z="0.065625" roll="0" pit="0" yaw="0" pos="1">  
+ </xacro:omni>
+<xacro:omni x="-0.175" y="0.30310889" z="0.065625" roll="0" pit="0" yaw="-1.04719755" pos="2">  
+ </xacro:omni>
+<xacro:omni x="-0.16" y="-0.277128127" z="0.065625" roll="0" pit="0" yaw="-2.09439510" pos="3">  
+ </xacro:omni>
+
+
+<joint name="wheel_joint1" type="continuous">
+<parent link="body" />
+<child link="wheel1" />
+<origin xyz="0.32 0.0 0.065625" rpy="0.0 0.0 0" />
+<axis xyz ="1 0 0">
+  <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+</joint>
+
+
+<transmission name="tran1">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="wheel_joint1">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+ <actuator name="motor1">
+     <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface> 
+     <mechanicalReduction>1</mechanicalReduction>
+ </actuator>
+</transmission>
+
+
+<joint name="wheel_joint2" type="continuous">
+<parent link="body" />
+<child link="wheel2" />
+<origin xyz="-0.175 0.30310889 0.065625" rpy="0.0 0.0 0" />
+<axis xyz ="-0.5 0.866025 0">
+  <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+</joint>
+
+<transmission name="tran2">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="wheel_joint2">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+ <actuator name="motor2">
+     <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface> 
+     <mechanicalReduction>1</mechanicalReduction>
+ </actuator>
+</transmission>
+
+
+<joint name="wheel_joint3" type="continuous">
+<parent link="body" />
+<child link="wheel3" />
+<origin xyz="-0.16 -0.277128127 0.065625" rpy="0.0 0.0 0" />
+<axis xyz ="-0.5 -0.866025 0">
+  <dynamics>
+        <damping>0.7</damping>
+        <friction>0.4</friction>
+       </dynamics>
+     </axis>
+</joint>
+
+<transmission name="tran3">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="wheel_joint3">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+ <actuator name="motor3">
+     <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+     <mechanicalReduction>1</mechanicalReduction>
+ </actuator>
+</transmission>
+
+<gazebo>
+   <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+   </plugin>
+</gazebo>
+
+<!--<link name="imu_link">
+  <inertial>
+    <mass value="0.01"/>
+    <origin rpy="0 0 0" xyz="0 0 0.5"/>
+    <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0.5"/>
+    <geometry>
+      <box size="0.1 0.1 0.1"/>
+    </geometry>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0.5" xyz="0 0 0.5"/>
+    <geometry>
+      <box size=".01 .01 .01"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="wheel_joint" type="fixed">
+    <axis xyz="1 0 0"/>
+    <origin xyz="0 0 0.5"/>
+    <parent link="body"/>
+    <child link="imu_link"/>
+</joint>
+
+
+
+<gazebo>
+  <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+    <alwaysOn>true</alwaysOn>
+    <updateRate>50.0</updateRate> 
+    <bodyName>imu_link</bodyName>
+    <topicName>imu_data</topicName>
+    <gaussianNoise>2.89e-08</gaussianNoise>
+    <xyzOffsets>0 0 0</xyzOffsets>
+    <rpyOffsets>0 0 0</rpyOffsets>
+    </plugin>
+
+</gazebo>-->
+ 
+</robot> 
+
+
+
+
+<!--
+Radius of wheel shaft : 12.04 mm
+Radius of wheel : 0.065625 m
+Thickness of wheel : 0.0115 + 0.043 = 0.06 m
+Length of roller : 18.41 mm
+Radius of body : 0.25 m
+Thickness of body : 10cm
+Radius of Rod : 1.2 cm
+Length of Rod 10 cm
+ -->

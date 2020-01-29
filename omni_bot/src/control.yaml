@@ -1,0 +1,21 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+wheel_joint1_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: wheel_joint1
+
+wheel_joint2_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: wheel_joint2
+
+wheel_joint3_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: wheel_joint3
+
+#gazebo_ros_control/pid_gains:
+#  wheel_joint1: {p: 7.5, i: 0.1, d: 0.0}
+#  wheel_joint2: {p: 7.5, i: 0.1, d: 0.0}
+#  wheel_joint3: {p: 7.5, i: 0.1, d: 0.0}
+

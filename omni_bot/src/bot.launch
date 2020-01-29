@@ -1,0 +1,33 @@
+<?xml	version="1.0" encoding="UTF-8"?>
+<launch>
+	<arg name="my_ns" />
+	<arg name="x_pos" />
+	<arg name="y_pos" />
+	<arg name="yaw" />
+	
+	
+	<group ns="$(arg my_ns)" >
+
+		<param	name="/$(arg my_ns)/robot_description"	command="$(find	xacro)/xacro $(find omni_bot)/src/bot.xacro" />
+        <rosparam file="$(find omni_bot)/src/control.yaml" command="load"/>
+               
+			<!--Run	a	python	script	to	the	send	a	service	call	to	gazebo_ros	to	spawn	a	
+			URDF	robot-->	
+		<node	name="urdf_spawner" pkg="gazebo_ros"	type="spawn_model"	respawn="false"	
+		output="screen"	args="-x $(arg x_pos) -y $(arg y_pos) -Y $(arg yaw) -urdf -model $(arg my_ns) -param robot_description"/>
+
+		<node name="controller_spawn" pkg="controller_manager" type="spawner" output="screen" respawn="false"
+		   args="/$(arg my_ns)/joint_state_controller
+		         /$(arg my_ns)/wheel_joint1_controller
+		         /$(arg my_ns)/wheel_joint2_controller
+		         /$(arg my_ns)/wheel_joint3_controller">
+		</node>
+		<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"  
+			  respawn="false" output="screen">
+		</node>
+
+	</group>
+
+		<!--<node	name="urdf_spawner1" 	pkg="gazebo_ros"	type="spawn_model"	respawn="false"	
+output="screen"	args="-urdf	-model	robot2	-file $(find	omni_bot)/ball.urdf"	/>-->
+</launch>
