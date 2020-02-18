@@ -28,7 +28,7 @@ sum_x = 0.0
 sum_y = 0.0 
 pos = 0
 obstacle = []
-tau = 5
+tau = 1
 v_max = 0.5
 flag = 0
 res = [0.0, 0.0]
@@ -74,28 +74,38 @@ def callback(data):
 	v_1, v_2 = goal_pid(x,y)
 
 	v_x, v_y = ORCA(v_1, v_2, x, y, vel_curx, vel_cury)
-	print("Received", v_x, v_y)
+	#print("Received", v_x, v_y)
 
+	v = np.array([[v_x],
+				[v_y]])
+
+	R_glob_to_loc = np.array([[cos(yaw), sin(yaw)],
+							[-sin(yaw), cos(yaw)]])
+
+	R_loc_to_wheel = np.array([[0, sqrt(3)/2, -sqrt(3)/2],
+							  [-1, 1/2, 1/2],
+							  [1/(3*0.385), 1/(3*0.385), 1/(3*0.385)]])
+
+	v_bar = np.matmul(R_glob_to_loc, v)
+
+	v_bar = np.array([[v_bar[0]],
+					 [v_bar[1]],
+					 [w]])
+
+	v = np.matmul(np.linalg.inv(R_loc_to_wheel), v_bar)
 
 	###########			v_x, v_y, w are body linear and angular velocities. For now take them from user ##################
 	###########			v1, v2, v3 are velocities at the COM of wheel. Divide by r_wheel to get ang vel for wheel ########
 
-	sol = solve([-v_x+v1*sin(yaw)+v2*sin(np.pi/3-yaw)-v3*sin(np.pi/3+yaw), -v_y-v1*cos(yaw)+v2*cos(np.pi/3-yaw)+v3*cos(np.pi/3+yaw), -w+ (v1+v2+v3)/(3*radius)], v1, v2, v3, dict=True, rational=False, simplify=False)
+	#sol = solve([-v_x+v1*sin(yaw)+v2*sin(np.pi/3-yaw)-v3*sin(np.pi/3+yaw), -v_y-v1*cos(yaw)+v2*cos(np.pi/3-yaw)+v3*cos(np.pi/3+yaw), -w+ (v1+v2+v3)/(3*radius)], v1, v2, v3, dict=True, rational=False, simplify=False)
 
-	v1 = (sol[0][v1]/0.065625)
-	v2 = (sol[0][v2]/0.065625)
-	v3 = (sol[0][v3]/0.065625)
+	#v1 = (sol[0][v1]/0.065625)
+	#v2 = (sol[0][v2]/0.065625)
+	#v3 = (sol[0][v3]/0.065625)
 
-	#v1 = 3*radius*w*(-sin(yaw - 1.0471975511966)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw - 1.0471975511966))/(sin(yaw)*cos(yaw - 1.0471975511966) - sin(yaw)*cos(yaw + 1.0471975511966) - sin(yaw - 1.0471975511966)*cos(yaw) - sin(yaw - 1.0471975511966)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw) + sin(yaw + 1.0471975511966)*cos(yaw - 1.0471975511966)) + v_x*(cos(yaw - 1.0471975511966) - cos(yaw + 1.0471975511966))/(sin(yaw)*cos(yaw - 1.0471975511966) - sin(yaw)*cos(yaw + 1.0471975511966) - sin(yaw - 1.0471975511966)*cos(yaw) - sin(yaw - 1.0471975511966)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw) + sin(yaw + 1.0471975511966)*cos(yaw - 1.0471975511966)) + v_y*(sin(yaw - 1.0471975511966) - sin(yaw + 1.0471975511966))/(sin(yaw)*cos(yaw - 1.0471975511966) - sin(yaw)*cos(yaw + 1.0471975511966) - sin(yaw - 1.0471975511966)*cos(yaw) - sin(yaw - 1.0471975511966)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw) + sin(yaw + 1.0471975511966)*cos(yaw - 1.0471975511966))
-
-	#v2 =  3*radius*w*(-sin(yaw)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw))/(sin(yaw)*cos(yaw - 1.0471975511966) - sin(yaw)*cos(yaw + 1.0471975511966) - sin(yaw - 1.0471975511966)*cos(yaw) - sin(yaw - 1.0471975511966)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw) + sin(yaw + 1.0471975511966)*cos(yaw - 1.0471975511966)) + v_x*(cos(yaw) + cos(yaw + 1.0471975511966))/(sin(yaw)*cos(yaw - 1.0471975511966) - sin(yaw)*cos(yaw + 1.0471975511966) - sin(yaw - 1.0471975511966)*cos(yaw) - sin(yaw - 1.0471975511966)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw) + sin(yaw + 1.0471975511966)*cos(yaw - 1.0471975511966)) + v_y*(sin(yaw) + sin(yaw + 1.0471975511966))/(sin(yaw)*cos(yaw - 1.0471975511966) - sin(yaw)*cos(yaw + 1.0471975511966) - sin(yaw - 1.0471975511966)*cos(yaw) - sin(yaw - 1.0471975511966)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw) + sin(yaw + 1.0471975511966)*cos(yaw - 1.0471975511966))
-
-	#v3 =  3*radius*w*(sin(yaw)*cos(yaw - 1.0471975511966) - sin(yaw - 1.0471975511966)*cos(yaw))/(sin(yaw)*cos(yaw - 1.0471975511966) - sin(yaw)*cos(yaw + 1.0471975511966) - sin(yaw - 1.0471975511966)*cos(yaw) - sin(yaw - 1.0471975511966)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw) + sin(yaw + 1.0471975511966)*cos(yaw - 1.0471975511966)) + v_x*(-cos(yaw) - cos(yaw - 1.0471975511966))/(sin(yaw)*cos(yaw - 1.0471975511966) - sin(yaw)*cos(yaw + 1.0471975511966) - sin(yaw - 1.0471975511966)*cos(yaw) - sin(yaw - 1.0471975511966)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw) + sin(yaw + 1.0471975511966)*cos(yaw - 1.0471975511966)) + v_y*(-sin(yaw) - sin(yaw - 1.0471975511966))/(sin(yaw)*cos(yaw - 1.0471975511966) - sin(yaw)*cos(yaw + 1.0471975511966) - sin(yaw - 1.0471975511966)*cos(yaw) - sin(yaw - 1.0471975511966)*cos(yaw + 1.0471975511966) + sin(yaw + 1.0471975511966)*cos(yaw) + sin(yaw + 1.0471975511966)*cos(yaw - 1.0471975511966))
-
-	#v1 = v1/0.065625
-	#v2 = v2/0.065625
-	#v3 = v3/0.065625
-
+	v1 = v[0]/0.065625
+	v2 = v[1]/0.065625
+	v3 = v[2]/0.065625
 
 	pub1.publish(v1)
 	pub2.publish(v2)
@@ -121,28 +131,48 @@ def ORCA(v_xpref, v_ypref, x, y, v1, v2):
 			cx = (obstacle[i][0]-x)/tau
 			cy = (obstacle[i][1]-y)/tau
 
+			#print("Dist", dist(0,0,cx,cy))
+
 			## Even zero vel doesnt prevent crash implies some error
 			if dist(0,0,cx,cy)<radius*2/tau:
-				print("Something wrong", flag)
-				flag += 1
-				res = [0,0]
-				pass
+				print("Something wrong")
+			#	flag += 1
+			#	res = [0,0]
+			#	pass
+
+		#else:
+			m = [0.0, 0.0]
+			## Current Velocities
+			v_cur = [v1, v2]
+
+			#print("VCurrent", v1, v2)
+
+			## relative velocities
+			v_relx = v1-obstacle[i][2]
+			v_rely = v2-obstacle[i][3]
+
+			## Finding the two tangents to the circle in vel plane
+			#m = Symbol('m', real=True)
+			#m = solve(abs((cy-m*cx)/sympy.sqrt(1+m**2))-(radius*2/tau), m, rational=False, simplify=False)
+
+			## sqrt becomes negative
+			if (cy*cx)**2 - 4*(((2*radius/tau)**2-cx**2)*((2*radius/tau)**2-cy**2)) <=0.05:
+				print("evade")
+				theta_min = atan2(obstacle[i][1]-y,obstacle[i][0]-x)
+				d_min = 1
+				if dist(x,y,obstacle[i][0],obstacle[i][1])>dist(x+d_min*cos(theta_min),y+d_min*sin(theta_min),obstacle[i][0],obstacle[i][1]):
+					theta_min += np.pi
+
+				u.append([d_min*cos(theta_min), d_min*sin(theta_min)])
+				n.append([cos(theta_min), sin(theta_min)])
+				#m[0] = -cy*cx
+				#m[1] = -cy*cx
 
 			else:
-				## Current Velocities
-				v_cur = [v1, v2]
+				m[0] = (-cy*cx + sqrt((cy*cx)**2 - 4*(((2*radius/tau)**2-cx**2)*((2*radius/tau)**2-cy**2))))/(2*((2*radius/tau)**2-cx**2))
+				m[1] = (-cy*cx - sqrt((cy*cx)**2 - 4*(((2*radius/tau)**2-cx**2)*((2*radius/tau)**2-cy**2))))/(2*((2*radius/tau)**2-cx**2))
 
-				print("VCurrent", v1, v2)
-
-				## relative velocities
-				v_relx = v1-obstacle[i][2]
-				v_rely = v2-obstacle[i][3]
-
-				## Finding the two tangents to the circle in vel plane
-				m = Symbol('m', real=True)
-				m = solve(abs((cy-m*cx)/sympy.sqrt(1+m**2))-(radius*2/tau), m, rational=False, simplify=False)
-
-				## If the vel lies between the tangents then it lies in the same halfplane as the center for both tangents
+			## If the vel lies between the tangents then it lies in the same halfplane as the center for both tangents
 				if ((v_rely-m[0]*v_relx>0 and cy-m[0]*cx>0) or (v_rely-m[0]*v_relx<0 and cy-m[0]*cx<0)) and ((v_rely-m[1]*v_relx>0 and cy-m[1]*cx>0) or (v_rely-m[1]*v_relx<0 and cy-m[1]*cx<0)):
 
 					## Points where tangents meet the circle (x1,y1), (x2,y2)
@@ -164,20 +194,20 @@ def ORCA(v_xpref, v_ypref, x, y, v1, v2):
 					if dist(v_relx,v_rely,cx,cy)<2*radius/tau and dist(0,0,v_relx, v_rely)<dist(0,0,cx,cy):
 						d_min = radius*2/tau - dist(cx,cy,v_relx,v_rely)
 						theta_min = atan2(v_rely-cy, v_relx-cx)
-						print(d_min)
-						if d_min>dist_from_line(v_relx,v_rely,m[0],0) or d_min>dist_from_line(v_relx,v_rely,m[1],0):
-							print("False 1")
+						#print(d_min)
+						#if d_min>dist_from_line(v_relx,v_rely,m[0],0) or d_min>dist_from_line(v_relx,v_rely,m[1],0):
+							#print("False 1")
 						if dist(v_relx,v_rely,cx,cy)>dist(v_relx+d_min*cos(theta_min),v_rely+d_min*sin(theta_min),cx,cy):
 								theta_min = theta_min+np.pi
-								print("True")
+								#print("True")
 						print("1")
 
 					else:
-
+						#print("angle between", atan2(abs(m[1]-m[0]), abs(1+m[0]*m[1])))
 						## Comparing the distance of the point from the two tangent lines
 						if dist_from_line(v_relx,v_rely,m[0],0) < dist_from_line(v_relx,v_rely,m[1],0):
 							d_min = dist_from_line(v_relx,v_rely,m[0],0)
-							theta_min = atan2(-1/m[0],1)
+							theta_min = atan2(-1,m[0])
 							## In case of reversed theta
 							if dist_from_line(v_relx,v_rely,m[0],0) < dist_from_line(v_relx+d_min*cos(theta_min),v_rely+d_min*sin(theta_min),m[0],0):
 								theta_min += np.pi
@@ -185,7 +215,7 @@ def ORCA(v_xpref, v_ypref, x, y, v1, v2):
 							print("2")
 						elif dist_from_line(v_relx,v_rely,m[1],0) <= dist_from_line(v_relx,v_rely,m[0],0):
 							d_min = dist_from_line(v_relx,v_rely,m[1],0)
-							theta_min = atan2(-1/m[1],1)
+							theta_min = atan2(-1,m[1])
 							if dist_from_line(v_relx,v_rely,m[1],0) < dist_from_line(v_relx+d_min*cos(theta_min),v_rely+d_min*sin(theta_min),m[1],0):
 								theta_min += np.pi
 								#print("True")
@@ -198,46 +228,47 @@ def ORCA(v_xpref, v_ypref, x, y, v1, v2):
 					u0 = [d_min*cos(theta_min), d_min*sin(theta_min)]
 					n.append(n0)
 					u.append(u0)
-					
-					#print(u)
-
-		if flag != 0:
-			return res
-
-		else:
-			if u == []:
-				if (((v_opt[1]-obstacle[i][3])-m[0]*(v_opt[0]-obstacle[i][2])>0 and cy-m[0]*cx>0) or ((v_opt[1]-obstacle[i][3])-m[0]*(v_opt[0]-obstacle[i][2])<0 and cy-m[0]*cx<0)) and (((v_opt[1]-obstacle[i][3])-m[1]*(v_opt[0]-obstacle[i][2])>0 and cy-m[1]*cx>0) or ((v_opt[1]-obstacle[i][3])-m[1]*(v_opt[0]-obstacle[i][2])<0 and cy-m[1]*cx<0)):
-					return res
-				else:
-					print("Else")
-					return v_opt[0], v_opt[1]
-
-			elif u != []:
-				v_opt = np.array(v_opt, dtype=Float64)
-				u = np.array(u, dtype=Float64)
-				n = np.array(n, dtype=Float64)
-
-				fun = lambda v: np.sqrt((v[0]-v_opt[0])**2 + (v[1]-v_opt[1])**2)
-
-				cons = ({'type': 'ineq', 'fun': lambda v: v_max**2 - v[0]**2 - v[1]**2},
-						#{'type': 'ineq', 'fun': lambda v: v[0]+1},
-						#{'type': 'ineq', 'fun': lambda v: v[1]+1},
-						#{'type': 'ineq', 'fun': lambda v: 1-v[1]}
-						)
-
-				for i in range(len(u)):
-					cons = cons + ({'type': 'ineq', 'fun': lambda v: np.dot((v-(v_cur+0.5*u[i])),n[i])},)
-
-
-				r = minimize(fun, (v1,v2), constraints=cons)
-				res = [r.x[0], r.x[1]]
-
-				print("VDESIRED", res[0], res[1])
 				
-				#if (((res[1]-obstacle[i][3])-m[0]*(res[0]-obstacle[i][2])>0 and ((obstacle[i][1]-y-res[1]*tau)/tau)-m[0]*((obstacle[i][0]-x-res[0]*tau)/tau)>0) or ((res[1]-obstacle[i][3])-m[0]*(res[0]-obstacle[i][2])<0 and ((obstacle[i][1]-y-res[1]*tau)/tau)-m[0]*((obstacle[i][0]-x-res[0]*tau)/tau)<0)) and (((res[1]-obstacle[i][3])-m[1]*(res[0]-obstacle[i][2])>0 and ((obstacle[i][1]-y-res[1]*tau)/tau)-m[1]*((obstacle[i][0]-x-res[0]*tau)/tau)>0) or ((res[1]-obstacle[i][3])-m[1]*(res[0]-obstacle[i][2])<0 and ((obstacle[i][1]-y-res[1]*tau)/tau)-m[1]*((obstacle[i][0]-x-res[0]*tau)/tau)<0)):
-					#print("It isnt avoiding")
-					
-				return res
+				#print(u)
+
+		#if flag != 0:
+		#	return res
+
+		#else:
+		if u == []:
+			if (((v_opt[1]-obstacle[i][3])-m[0]*(v_opt[0]-obstacle[i][2])>0 and cy-m[0]*cx>0) or ((v_opt[1]-obstacle[i][3])-m[0]*(v_opt[0]-obstacle[i][2])<0 and cy-m[0]*cx<0)) and (((v_opt[1]-obstacle[i][3])-m[1]*(v_opt[0]-obstacle[i][2])>0 and cy-m[1]*cx>0) or ((v_opt[1]-obstacle[i][3])-m[1]*(v_opt[0]-obstacle[i][2])<0 and cy-m[1]*cx<0)):
+				print("4")
+				return v_opt[0], v_opt[1]
+			else:
+				print("Else")
+				return v_opt[0], v_opt[1]
+
+		elif u != []:
+			v_opt = np.array(v_opt, dtype=Float64)
+			u = np.array(u, dtype=Float64)
+			n = np.array(n, dtype=Float64)
+
+			fun = lambda v: np.sqrt((v[0]-v_opt[0])**2 + (v[1]-v_opt[1])**2)
+
+			cons = ({'type': 'ineq', 'fun': lambda v: v_max**2 - v[0]**2 - v[1]**2},
+					#{'type': 'ineq', 'fun': lambda v: v[0]+1},
+					#{'type': 'ineq', 'fun': lambda v: v[1]+1},
+					#{'type': 'ineq', 'fun': lambda v: 1-v[1]}
+					)
+
+			for i in range(len(u)):
+				cons = cons + ({'type': 'ineq', 'fun': lambda v: np.dot((v-(v_cur+0.5*u[i])),n[i])},)
+
+
+			r = minimize(fun, (v1,v2), constraints=cons)
+			res = [r.x[0], r.x[1]]
+
+			#print("VDESIRED", res[0], res[1])
+			
+			#if (((res[1]-obstacle[i][3])-m[0]*(res[0]-obstacle[i][2])>0 and ((obstacle[i][1]-y-res[1]*tau)/tau)-m[0]*((obstacle[i][0]-x-res[0]*tau)/tau)>0) or ((res[1]-obstacle[i][3])-m[0]*(res[0]-obstacle[i][2])<0 and ((obstacle[i][1]-y-res[1]*tau)/tau)-m[0]*((obstacle[i][0]-x-res[0]*tau)/tau)<0)) and (((res[1]-obstacle[i][3])-m[1]*(res[0]-obstacle[i][2])>0 and ((obstacle[i][1]-y-res[1]*tau)/tau)-m[1]*((obstacle[i][0]-x-res[0]*tau)/tau)>0) or ((res[1]-obstacle[i][3])-m[1]*(res[0]-obstacle[i][2])<0 and ((obstacle[i][1]-y-res[1]*tau)/tau)-m[1]*((obstacle[i][0]-x-res[0]*tau)/tau)<0)):
+				#print("It isnt avoiding")
+				
+			return res
 
 
 def dist(x1, y1, x2, y2):

@@ -12,7 +12,7 @@ similarly for other bot.
 5. Consider all velocities less than v_max
 6. Take new velocity as arg_min||(v-v_pref)||
 %}
-%{
+
 p = param.Continuous('VO')
 vb = 1
 xa = 2
@@ -21,19 +21,9 @@ xb = 5
 yb = 4
 ra = 1
 rb = 1
-t = 0.2
+t = 
 
 px = 3
 py = 2
 r = 2
 
-syms a b c x vx vy
-eqn1 = vx*t >= px
-exn2 = vy*t >= py
-
-%}
-%%type mupad for getting solution
-
-syms x y
-S = solve(x+y==1,x<0.6,y<0.7,[x,y]);
-S.x

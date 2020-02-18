@@ -23,10 +23,11 @@
 	
 	<include file="$(find omni_bot)/src/bot.launch">
 		<arg name="my_ns" value="bot1"/>
-		<arg name="x_pos" value="1"/>
-		<arg name="y_pos" value="-2"/>
-		<arg name="yaw" value="1.5"/>
+		<arg name="x_pos" value="0"/>
+		<arg name="y_pos" value="0"/>
+		<arg name="yaw" value="0"/>
 	</include>
+
 
 	<include file="$(find omni_bot)/src/bot.launch">
 		<arg name="my_ns" value="bot2"/>
@@ -34,4 +35,19 @@
 		<arg name="y_pos" value="2"/>
 		<arg name="yaw" value="0"/>
 	</include>
+
+	<include file="$(find omni_bot)/src/bot.launch">
+		<arg name="my_ns" value="bot3"/>
+		<arg name="x_pos" value="2"/>
+		<arg name="y_pos" value="0"/>
+		<arg name="yaw" value="0"/>
+	</include>
+
+	<include file="$(find omni_bot)/src/bot.launch">
+		<arg name="my_ns" value="bot4"/>
+		<arg name="x_pos" value="2"/>
+		<arg name="y_pos" value="2"/>
+		<arg name="yaw" value="0"/>
+	</include>
+
 </launch>
