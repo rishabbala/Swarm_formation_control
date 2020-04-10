@@ -11,7 +11,8 @@ This repo contains the code for Formation Control for multiple omni-directional 
 Due to the large computational requirement, I made changes to the algorithm to take a sub-optimal path in the 6 robot case. The optimization and computational requirements are the major drawback.
 
 To build the repo place it in your workspace and do:
-```catkin_make source
+```
+catkin_make source
 devel/setup.bash
 ```
 
