@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+  <robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+         xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+         xmlns:interface="http://ros.org/wiki/xacro"
+         xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" name="ballbot">
+<!-- 
+<link name="wheel">
+    <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://omni_bot/src/main_frame.stl" scale="1 1 1"/>
+      </geometry>      
+    </collision>
+    <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://omni_bot/src/main_frame.stl" scale="1 1 1"/>
+      </geometry>
+    </visual>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value = "2.5"/>
+      <inertia ixx="0.00108333333333" ixy="0" ixz="0" iyy="0.00108333333333" iyz="0" izz="0.002"/>
+    </inertial>
+  </link>
+ -->
+<link name="roller">
+    <collision>
+    <origin xyz="0.2 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://omni_bot/src/sub_wheel.stl" scale="1 1 1"/>
+      </geometry>      
+    </collision>
+    <visual>
+    <origin xyz="0.2 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://omni_bot/src/sub_wheel.stl" scale="1 1 1"/>
+      </geometry>
+    </visual>
+    <inertial>
+      <origin xyz="0.2 0 0" rpy="0 0 0"/>
+      <mass value = "2.5"/>
+      <inertia ixx="0.00108333333333" ixy="0" ixz="0" iyy="0.00108333333333" iyz="0" izz="0.002"/>
+    </inertial>
+    <!-- <gravity> 1 </gravity>
+    <selfColli-->
+</link>
+
+</robot> 

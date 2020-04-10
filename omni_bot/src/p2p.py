@@ -45,7 +45,6 @@ def callback(data):
 				break
 	x = data.pose[i].position.x
 	y = data.pose[i].position.y
-	print(x,y)
 
 	a = data.pose[i].orientation.x
 	b = data.pose[i].orientation.y
@@ -57,14 +56,16 @@ def callback(data):
 
 	v_x, v_y = goal_pid(x,y)
 
+	print(v_y)
+
 	###########			v_x, v_y, w are body linear and angular velocities. For now take them from user ##################
 	###########			v1, v2, v3 are velocities at the COM of wheel. Divide by r_wheel to get ang vel for wheel ########
 
 	sol = solve([-v_x+v1*sin(yaw)+v2*sin(np.pi/3-yaw)-v3*sin(np.pi/3+yaw), -v_y-v1*cos(yaw)+v2*cos(np.pi/3-yaw)+v3*cos(np.pi/3+yaw), -w+ (v1+v2+v3)/0.35], dict=True)
 
-	v1 = sol[0][v1]/0.065625
-	v2 = sol[0][v2]/0.065625
-	v3 = sol[0][v3]/0.065625
+	v1 = sol[0][v1]*1.56862/0.065625
+	v2 = sol[0][v2]*1.56862/0.065625
+	v3 = sol[0][v3]*1.56862/0.065625
 
 	pub1.publish(v1)
 	pub2.publish(v2)
@@ -75,7 +76,7 @@ def goal_pid(x,y):
 	global goal_x, goal_y, goal_xprev, goal_yprev, sum_x, sum_y
 
 	kp = 1
-	ki = 0.001
+	ki = 0.00085
 	kd = 0.5
 
 	vx = kp*(goal_x-x) + kd*(goal_x-goal_xprev) + ki*sum_x

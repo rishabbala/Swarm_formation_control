@@ -15,8 +15,8 @@
 			<arg	name="debug"	value="$(arg	debug)"	/>
 			<arg	name="gui"	value="$(arg gui)"	/>
 			<arg	name="paused"	value="$(arg	paused)"	/>
-			<arg	name="use_sim_time"	value="$(arg	use_sim_time)"	/>
-			<arg	name="headless"	value="$(arg	headless)"	/>
+			<arg	name="use_sim_time"	value="$(arg use_sim_time)"	/>
+			<arg	name="headless"	value="$(arg headless)"	/>
 	</include>
 	<!--	Load	the	URDF	into	the	ROS	Parameter	Server	-->
 
@@ -31,23 +31,37 @@
 
 	<include file="$(find omni_bot)/src/bot.launch">
 		<arg name="my_ns" value="bot2"/>
-		<arg name="x_pos" value="0"/>
-		<arg name="y_pos" value="2"/>
+		<arg name="x_pos" value="6"/>
+		<arg name="y_pos" value="0"/>
 		<arg name="yaw" value="0"/>
 	</include>
-
+<!-- 
 	<include file="$(find omni_bot)/src/bot.launch">
 		<arg name="my_ns" value="bot3"/>
-		<arg name="x_pos" value="2"/>
-		<arg name="y_pos" value="0"/>
+		<arg name="x_pos" value="9"/>
+		<arg name="y_pos" value="5.19615242271"/>
 		<arg name="yaw" value="0"/>
 	</include>
 
 	<include file="$(find omni_bot)/src/bot.launch">
 		<arg name="my_ns" value="bot4"/>
-		<arg name="x_pos" value="2"/>
-		<arg name="y_pos" value="2"/>
+		<arg name="x_pos" value="6"/>
+		<arg name="y_pos" value="10.3923048454"/>
 		<arg name="yaw" value="0"/>
 	</include>
 
+	<include file="$(find omni_bot)/src/bot.launch">
+		<arg name="my_ns" value="bot5"/>
+		<arg name="x_pos" value="0"/>
+		<arg name="y_pos" value="10.3923048454"/>
+		<arg name="yaw" value="0"/>
+	</include>
+
+	<include file="$(find omni_bot)/src/bot.launch">
+		<arg name="my_ns" value="bot6"/>
+		<arg name="x_pos" value="-3"/>
+		<arg name="y_pos" value="5.19615242271"/>
+		<arg name="yaw" value="0"/>
+	</include> 
+ -->
 </launch>

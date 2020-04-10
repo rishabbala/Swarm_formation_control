@@ -15,7 +15,7 @@ wheel_joint3_controller:
   joint: wheel_joint3
 
 gazebo_ros_control/pid_gains:
-  wheel_joint1: {p: 5.0, i: 0.1, d: 0.000001}
-  wheel_joint2: {p: 5.0, i: 0.1, d: 0.000001}
-  wheel_joint3: {p: 5.0, i: 0.1, d: 0.000001}
+  wheel_joint1: {p: 1.0, i: 0.1, d: 0.0}
+  wheel_joint2: {p: 1.0, i: 0.1, d: 0.0}
+  wheel_joint3: {p: 1.0, i: 0.1, d: 0.0}
 
