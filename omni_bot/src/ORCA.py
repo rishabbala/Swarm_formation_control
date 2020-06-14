@@ -25,7 +25,7 @@ pub3 = rospy.Publisher("/"+name+"/wheel_joint3_controller/command", Float64, que
 goal_xprev = 0.0
 goal_yprev = 0.0
 sum_x = 0.0
-sum_y = 0.0 
+sum_y = 0.0
 pos = 0
 obstacle = []
 tau = 1.8
@@ -145,7 +145,7 @@ def ORCA(v_xpref, v_ypref, x, y, v_curx, v_cury):
 			x2 = (cy+cx/m[1])/(m[1]+1/m[1])
 			y2 = m[1]*x2
 
-			## If the velocity lies between the two tangents (same side as center) 
+			## If the velocity lies between the two tangents (same side as center)
 			if (cy-m[0]*cx)*(v_rely-m[0]*v_relx)>0 and (cy-m[1]*cx)*(v_rely-m[1]*v_relx)>0:
 				if area(v_relx, v_rely, cx, cy, x1, y1) + area(v_relx, v_rely, 0, 0, cx, cy) + area(v_relx, v_relx, 0, 0, x1, y1) == area(0, 0, cx, cy, x1, y1) and dist(cx,cy,v_relx,v_rely)>r:
 					pass
@@ -203,7 +203,7 @@ def ORCA(v_xpref, v_ypref, x, y, v_curx, v_cury):
 						d_min = dist(v_relx,v_rely,px4,py4)
 						u.append([px4-v_relx, py4-v_rely])
 						n.append([(px4-v_relx)/d_min, (py4-v_rely)/d_min])
-			
+
 		if u == []:
 			return v_opt[0], v_opt[1]
 
@@ -212,16 +212,16 @@ def ORCA(v_xpref, v_ypref, x, y, v_curx, v_cury):
 			u = np.array(u, dtype=Float64)
 			n = np.array(n, dtype=Float64)
 
-			## Minimizing the distance to the optimal velocity value from PID 
+			## Minimizing the distance to the optimal velocity value from PID
 			fun = lambda v: (v[0]-v_opt[0])**2 + (v[1]-v_opt[1])**2
 
 			cons = [{'type': 'ineq', 'fun': lambda v: v_max**2 - v[0]**2 - v[1]**2},]
 
 			for i in range(len(u)):
 				if i == len(u)-1:
-					cons = cons + [{'type': 'ineq', 'fun': lambda v: np.dot((v-(v_cur+0.5*u[i])),n[i])}]
+					cons = cons + [{'type': 'ineq', 'fun': lambda v: np.dot((v-(v_cur+0.6*u[i])),n[i])}]
 				else:
-					cons = cons + [{'type': 'ineq', 'fun': lambda v: np.dot((v-(v_cur+0.5*u[i])),n[i])},]
+					cons = cons + [{'type': 'ineq', 'fun': lambda v: np.dot((v-(v_cur+0.6*u[i])),n[i])},]
 
 			r = minimize(fun, v_opt, constraints=cons)
 			return r.x[0], r.x[1]
@@ -270,7 +270,7 @@ def goal_pid(x,y,vel_curx,vel_cury):
 		sum_x = 0
 	if abs(goal_y-y)<=0.1:
 		sum_y = 0
-	
+
 	return vx,vy
 
 def listener ():
